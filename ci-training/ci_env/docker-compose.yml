@@ -1,0 +1,28 @@
+version: "3.5"
+services:
+  jenkins:
+    build: jenkins/.
+    ports:
+      - "50000:50000"
+      - "8080:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - ci-net
+  artifactory:
+    image: "docker.bintray.io/jfrog/artifactory-cpp-ce:latest"
+    ports:
+      - "8081:8081"
+    volumes:
+      - artifactory_data:/var/opt/jfrog/artifactory
+    networks:
+      - ci-net
+volumes:
+  jenkins_home:
+  artifactory_data:
+
+networks:
+  ci-net:
+    name: ci-net
+    driver: bridge
